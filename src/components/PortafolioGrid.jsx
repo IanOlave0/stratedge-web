@@ -1,16 +1,16 @@
 import React from 'react';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { STRINGS } from '../i18n/strings';
 
 /**
  * Componente PortafolioGrid
- * * Cuadrícula responsiva de proyectos destacados o casos de éxito.
+ * * Cuadrícula responsiva de proyectos con shadcn Card.
  * * Los datos de proyectos son mock data — en el futuro vendrán del backend.
- * * Usa i18n strings para labels de UI y encabezados de sección.
  */
 export default function PortafolioGrid() {
   const { portfolio } = STRINGS;
 
-  // Datos de prueba (Mock data) que simulan la información de una base de datos.
+  // Datos de prueba (Mock data)
   const projects = [
     {
       id: 1,
@@ -51,22 +51,24 @@ export default function PortafolioGrid() {
           </p>
         </div>
 
-        {/* Cuadrícula de proyectos */}
+        {/* Cuadrícula de proyectos con shadcn Card */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project) => (
-            <div
+            <Card
               key={project.id}
-              className="bg-slate-950 rounded-2xl overflow-hidden border border-slate-800 shadow-lg hover:shadow-emerald-900/20 transition-all duration-300 group"
+              className="bg-slate-950 border-slate-800 overflow-hidden shadow-lg hover:shadow-emerald-900/20 transition-all duration-300 group"
             >
               <div className="overflow-hidden">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-56 object-cover transform transition-transform duration-500 group-hover:scale-110"
-                />
+                <CardHeader className="p-0">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-56 object-cover transform transition-transform duration-500 group-hover:scale-110"
+                  />
+                </CardHeader>
               </div>
 
-              <div className="p-8">
+              <CardContent className="p-8">
                 <span className="text-emerald-400 text-xs font-bold tracking-wider uppercase mb-2 block">
                   {project.category}
                 </span>
@@ -79,8 +81,8 @@ export default function PortafolioGrid() {
                 <p className="text-slate-400 leading-relaxed text-sm">
                   {project.description}
                 </p>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </div>

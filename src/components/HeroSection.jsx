@@ -1,10 +1,11 @@
 import React from 'react';
+import { Button } from '@/components/ui/button';
 import { STRINGS } from '../i18n/strings';
 
 /**
  * Componente HeroSection
  * * Sección principal full-viewport con titulares, descripción y CTAs.
- * * Usa i18n strings para todo el texto visible.
+ * * Usa shadcn Button para los CTAs con variantes y estilos custom.
  */
 export default function HeroSection() {
   const { hero } = STRINGS;
@@ -33,22 +34,27 @@ export default function HeroSection() {
           {hero.description}
         </p>
 
-        {/* CTAs */}
-        <div className="mt-14 flex flex-col sm:flex-row gap-6 justify-center items-center w-full sm:w-auto">
-          <a
-            href="#"
-            className="w-full sm:w-auto px-12 py-5 bg-emerald-600 text-white font-bold rounded-full text-lg shadow-xl hover:bg-emerald-500 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-emerald-900/40"
+        {/* CTAs con shadcn Button */}
+        <div className="mt-14 flex flex-col sm:flex-row gap-6 justify-center items-center">
+          <Button
+            asChild
+            size="lg"
+            className="rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-xl shadow-emerald-900/20"
           >
-            {hero.ctaPrimary}
-          </a>
+            <a href="#">{hero.ctaPrimary}</a>
+          </Button>
 
-          <a
-            href="#"
-            className="w-full sm:w-auto px-12 py-5 bg-slate-900 text-slate-100 font-semibold rounded-full text-lg border border-slate-800 hover:bg-slate-800 transition-all duration-300 group"
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+            className="rounded-full border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-200 font-semibold"
           >
-            {hero.ctaSecondary}
-            <span className="inline-block ml-2 transition-transform group-hover:translate-x-1">→</span>
-          </a>
+            <a href="#">
+              {hero.ctaSecondary}
+              <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+          </Button>
         </div>
 
         {/* Indicador visual de scroll */}

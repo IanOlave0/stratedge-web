@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 import { STRINGS } from '../i18n/strings';
 
 /**
  * Componente Navbar
  * * Barra de navegación superior con logo, enlaces y CTA.
- * * Usa i18n strings para todo el texto visible.
+ * * Usa shadcn Button para el CTA principal.
  */
 export default function Navbar() {
   const { nav } = STRINGS;
@@ -24,13 +25,10 @@ export default function Navbar() {
           <li><a href="#" className="hover:text-emerald-400 transition-colors">{nav.links.services}</a></li>
         </ul>
 
-        {/* CTA */}
-        <Link
-          to="/cotizar"
-          className="bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold py-2 px-6 rounded-full transition-transform transform hover:scale-105 shadow-md inline-block"
-        >
-          {nav.cta}
-        </Link>
+        {/* CTA con shadcn Button */}
+        <Button asChild className="bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold rounded-full shadow-md">
+          <Link to="/cotizar">{nav.cta}</Link>
+        </Button>
       </div>
     </nav>
   );
