@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { Check } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
 import {
   Select,
   SelectContent,
@@ -21,15 +23,18 @@ const { wizard } = STRINGS;
 const E = wizard.errors;
 const TOTAL_STEPS = 3;
 
+const SERVICE_VALUES = ['branding', 'web', 'ads', 'ecommerce', 'social'];
+
 /**
  * Esquema de validación con Zod.
- * Los mensajes de error se referencian desde STRINGS.wizard.errors
- * para mantenerlos centralizados y listos para i18n.
+ * * services ahora es un array multi-opción — el usuario puede elegir varios servicios.
+ * * Mínimo 1 servicio requerido.
  */
 const quoteSchema = z.object({
-  serviceType: z.enum(['branding', 'web', 'ads', 'ecommerce', 'social'], {
-    required_error: E.serviceRequired,
-  }),
+  services: z
+    .array(z.enum(SERVICE_VALUES))
+    .min(1, E.servicesRequired),
+
   projectScope: z.string().min(10, E.scopeMin),
 
   budget: z.enum(['under_5k', '5k_15k', '15k_50k', 'over_50k'], {
@@ -46,9 +51,9 @@ const quoteSchema = z.object({
   phone: z.string().optional(),
 });
 
-/** Mapea los nombres de campo de Zod a los pasos donde se validan */
+/** Mapea los nombres de campo a los pasos donde se validan */
 const STEP_FIELDS = {
-  1: ['serviceType', 'projectScope'],
+  1: ['services', 'projectScope'],
   2: ['budget', 'timeline', 'extraNotes'],
   3: ['fullName', 'email', 'company', 'phone'],
 };
@@ -56,8 +61,8 @@ const STEP_FIELDS = {
 /**
  * Componente WizardCotizacion
  * * Formulario multi-paso para cotizar proyectos.
- * * Usa React Hook Form + Zod para validación progresiva por paso.
- * * Todos los textos visibles se obtienen de STRINGS (i18n-ready).
+ * * Paso 1: selección múltiple de servicios (toggle cards).
+ * * Encabezado con badges que indican el paso actual, completados y pendientes.
  */
 export default function WizardCotizacion() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -66,7 +71,7 @@ export default function WizardCotizacion() {
   const form = useForm({
     resolver: zodResolver(quoteSchema),
     defaultValues: {
-      serviceType: undefined,
+      services: [],
       projectScope: '',
       budget: undefined,
       timeline: undefined,
@@ -84,8 +89,24 @@ export default function WizardCotizacion() {
     handleSubmit,
     control,
     trigger,
+    watch,
+    setValue,
     formState: { errors },
   } = form;
+
+  const selectedServices = watch('services');
+
+  /**
+   * Alterna un servicio en el array de selección múltiple.
+   * Si ya está seleccionado, lo quita; si no, lo agrega.
+   */
+  const toggleService = (value) => {
+    const current = selectedServices || [];
+    const updated = current.includes(value)
+      ? current.filter((v) => v !== value)
+      : [...current, value];
+    setValue('services', updated, { shouldValidate: true });
+  };
 
   const handleNext = async () => {
     const fieldsToValidate = STEP_FIELDS[currentStep];
@@ -111,14 +132,48 @@ export default function WizardCotizacion() {
 
   return (
     <Card className="max-w-3xl mx-auto bg-slate-900 border-slate-800 shadow-2xl">
-      {/* Encabezado: indicador de progreso */}
+      {/* Encabezado: badges de pasos + barra de progreso */}
       <CardHeader className="bg-slate-800/50 border-b border-slate-700 pb-4">
-        <p className="text-emerald-400 font-bold text-sm tracking-widest uppercase">
-          {wizard.stepLabel(currentStep, TOTAL_STEPS)}
-        </p>
-        <div className="w-full bg-slate-700 rounded-full h-2 mt-3">
+        <div className="flex items-center justify-between">
+          {[1, 2, 3].map((step) => {
+            const isActive = step === currentStep;
+            const isCompleted = step < currentStep;
+
+            return (
+              <div key={step} className="flex items-center">
+                <Badge
+                  variant={isActive ? 'default' : isCompleted ? 'secondary' : 'outline'}
+                  className={`px-3 py-1 text-xs font-semibold ${
+                    isActive
+                      ? 'bg-emerald-600 hover:bg-emerald-600 text-white border-emerald-500'
+                      : isCompleted
+                      ? 'bg-emerald-900/40 text-emerald-300 border-emerald-700/50'
+                      : 'bg-transparent text-slate-500 border-slate-700'
+                  }`}
+                >
+                  {isCompleted ? (
+                    <Check className="mr-1 h-3 w-3" />
+                  ) : (
+                    <span className="mr-1 text-[10px] font-mono">{step}</span>
+                  )}
+                  {wizard.steps[step]}
+                </Badge>
+                {/* Conector entre badges */}
+                {step < 3 && (
+                  <div
+                    className={`w-8 sm:w-16 h-px mx-1 ${
+                      step < currentStep ? 'bg-emerald-500/50' : 'bg-slate-700'
+                    }`}
+                  />
+                )}
+              </div>
+            );
+          })}
+        </div>
+        {/* Barra de progreso */}
+        <div className="w-full bg-slate-700 rounded-full h-1.5 mt-4">
           <div
-            className="bg-emerald-500 h-2 rounded-full transition-all duration-500 ease-out"
+            className="bg-emerald-500 h-1.5 rounded-full transition-all duration-500 ease-out"
             style={{ width: `${(currentStep / TOTAL_STEPS) * 100}%` }}
           />
         </div>
@@ -126,42 +181,57 @@ export default function WizardCotizacion() {
 
       <CardContent className="p-8 min-h-[360px]">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* =========== PASO 1 =========== */}
+          {/* =========== PASO 1: Servicios (multi-select) =========== */}
           {currentStep === 1 && (
             <div className="animate-fade-in space-y-6">
               <h2 className="text-3xl font-bold text-white">{wizard.step1.heading}</h2>
 
               <div className="space-y-3">
-                <Label htmlFor="serviceType" className="text-slate-300 text-sm">
-                  {wizard.step1.serviceLabel}
-                </Label>
+                <div>
+                  <Label className="text-slate-300 text-sm">
+                    {wizard.step1.serviceLabel}
+                  </Label>
+                  <p className="text-slate-500 text-xs mt-0.5">{wizard.step1.serviceHint}</p>
+                </div>
+
                 <Controller
-                  name="serviceType"
+                  name="services"
                   control={control}
-                  render={({ field }) => (
+                  render={() => (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {wizard.serviceOptions.map((opt) => (
-                        <button
-                          key={opt.value}
-                          type="button"
-                          onClick={() => {
-                            field.onChange(opt.value);
-                            trigger('serviceType');
-                          }}
-                          className={`text-left px-4 py-3 rounded-lg border text-sm font-medium transition-all ${
-                            field.value === opt.value
-                              ? 'border-emerald-500 bg-emerald-500/10 text-emerald-300'
-                              : 'border-slate-700 bg-slate-800 text-slate-400 hover:border-slate-600'
-                          }`}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
+                      {wizard.serviceOptions.map((opt) => {
+                        const isSelected = (selectedServices || []).includes(opt.value);
+
+                        return (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() => toggleService(opt.value)}
+                            className={`text-left px-4 py-3 rounded-lg border text-sm font-medium transition-all flex items-center gap-2 ${
+                              isSelected
+                                ? 'border-emerald-500 bg-emerald-500/10 text-emerald-300 ring-1 ring-emerald-500/30'
+                                : 'border-slate-700 bg-slate-800 text-slate-400 hover:border-slate-600'
+                            }`}
+                          >
+                            {/* Checkbox visual */}
+                            <span
+                              className={`flex-shrink-0 w-4 h-4 rounded border flex items-center justify-center transition-all ${
+                                isSelected
+                                  ? 'bg-emerald-500 border-emerald-500'
+                                  : 'border-slate-600 bg-slate-700/50'
+                              }`}
+                            >
+                              {isSelected && <Check className="h-3 w-3 text-slate-900" />}
+                            </span>
+                            {opt.label}
+                          </button>
+                        );
+                      })}
                     </div>
                   )}
                 />
-                {errors.serviceType && (
-                  <p className="text-red-400 text-xs mt-1">{errors.serviceType.message}</p>
+                {errors.services && (
+                  <p className="text-red-400 text-xs mt-1">{errors.services.message}</p>
                 )}
               </div>
 

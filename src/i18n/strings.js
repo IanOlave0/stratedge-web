@@ -70,10 +70,18 @@ export const STRINGS = {
     submit: "Enviar Cotización",
     submitting: "Enviando...",
 
-    /* Paso 1: Servicios */
+    /* Nombres de pasos para los badges */
+    steps: {
+      1: "Servicios",
+      2: "Presupuesto",
+      3: "Contacto",
+    },
+
+    /* Paso 1: Servicios (multi-selección) */
     step1: {
       heading: "¿Qué necesitas?",
-      serviceLabel: "Selecciona el servicio principal",
+      serviceLabel: "Selecciona los servicios que te interesan",
+      serviceHint: "Puedes elegir más de uno",
       scopeLabel: "Cuéntanos brevemente sobre tu proyecto",
       scopePlaceholder:
         "Ej: Quiero rediseñar mi sitio web y lanzar campañas en Meta Ads para aumentar ventas...",
@@ -107,7 +115,7 @@ export const STRINGS = {
 
     /* Mensajes de error de validación (Zod) */
     errors: {
-      serviceRequired: "Selecciona al menos un servicio",
+      servicesRequired: "Selecciona al menos un servicio",
       scopeMin: "Describe tu proyecto con al menos 10 caracteres",
       budgetRequired: "Selecciona un rango de presupuesto",
       timelineRequired: "Selecciona la urgencia del proyecto",
