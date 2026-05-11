@@ -15,55 +15,36 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
+import { STRINGS } from '@/i18n/strings';
+
+const { wizard } = STRINGS;
+const E = wizard.errors;
+const TOTAL_STEPS = 3;
 
 /**
- * Esquema de validación con Zod — un paso por objeto anidado.
- * Cada paso se valida de forma independiente al intentar avanzar.
+ * Esquema de validación con Zod.
+ * Los mensajes de error se referencian desde STRINGS.wizard.errors
+ * para mantenerlos centralizados y listos para i18n.
  */
 const quoteSchema = z.object({
-  // Paso 1: Selección de servicios
   serviceType: z.enum(['branding', 'web', 'ads', 'ecommerce', 'social'], {
-    required_error: 'Selecciona al menos un servicio',
+    required_error: E.serviceRequired,
   }),
-  projectScope: z.string().min(10, 'Describe tu proyecto con al menos 10 caracteres'),
+  projectScope: z.string().min(10, E.scopeMin),
 
-  // Paso 2: Presupuesto y plazos
   budget: z.enum(['under_5k', '5k_15k', '15k_50k', 'over_50k'], {
-    required_error: 'Selecciona un rango de presupuesto',
+    required_error: E.budgetRequired,
   }),
   timeline: z.enum(['urgent', 'standard', 'relaxed'], {
-    required_error: 'Selecciona la urgencia del proyecto',
+    required_error: E.timelineRequired,
   }),
   extraNotes: z.string().optional(),
 
-  // Paso 3: Datos de contacto
-  fullName: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
-  email: z.string().email('Ingresa un correo electrónico válido'),
-  company: z.string().min(2, 'Ingresa el nombre de tu empresa'),
+  fullName: z.string().min(2, E.fullNameMin),
+  email: z.string().email(E.emailInvalid),
+  company: z.string().min(2, E.companyMin),
   phone: z.string().optional(),
 });
-
-/** Opciones de cada paso — se extraen para mantener el JSX limpio */
-const SERVICE_OPTIONS = [
-  { value: 'branding', label: 'Branding e Identidad Visual' },
-  { value: 'web', label: 'Desarrollo Web / App' },
-  { value: 'ads', label: 'Publicidad Digital (Ads)' },
-  { value: 'ecommerce', label: 'Optimización E-Commerce' },
-  { value: 'social', label: 'Gestión de Redes Sociales' },
-];
-
-const BUDGET_OPTIONS = [
-  { value: 'under_5k', label: 'Menos de $5,000' },
-  { value: '5k_15k', label: '$5,000 — $15,000' },
-  { value: '15k_50k', label: '$15,000 — $50,000' },
-  { value: 'over_50k', label: 'Más de $50,000' },
-];
-
-const TIMELINE_OPTIONS = [
-  { value: 'urgent', label: 'Urgente (1-2 semanas)' },
-  { value: 'standard', label: 'Estándar (3-6 semanas)' },
-  { value: 'relaxed', label: 'Sin prisa (2+ meses)' },
-];
 
 /** Mapea los nombres de campo de Zod a los pasos donde se validan */
 const STEP_FIELDS = {
@@ -72,13 +53,11 @@ const STEP_FIELDS = {
   3: ['fullName', 'email', 'company', 'phone'],
 };
 
-const TOTAL_STEPS = 3;
-
 /**
  * Componente WizardCotizacion
  * * Formulario multi-paso para cotizar proyectos.
  * * Usa React Hook Form + Zod para validación progresiva por paso.
- * * Renderiza componentes shadcn/ui dentro de un Card.
+ * * Todos los textos visibles se obtienen de STRINGS (i18n-ready).
  */
 export default function WizardCotizacion() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -97,7 +76,6 @@ export default function WizardCotizacion() {
       company: '',
       phone: '',
     },
-    // Solo validamos los campos visibles en cada paso
     mode: 'onChange',
   });
 
@@ -109,10 +87,6 @@ export default function WizardCotizacion() {
     formState: { errors },
   } = form;
 
-  /**
-   * Valida solo los campos del paso actual antes de avanzar.
-   * Si pasan, incrementa currentStep.
-   */
   const handleNext = async () => {
     const fieldsToValidate = STEP_FIELDS[currentStep];
     const isValid = await trigger(fieldsToValidate);
@@ -125,17 +99,13 @@ export default function WizardCotizacion() {
     if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
 
-  /**
-   * Se ejecuta al finalizar los 3 pasos.
-   * En el futuro enviará los datos al backend.
-   */
   const onSubmit = (data) => {
     setIsSubmitting(true);
     // TODO: conectar con backend
     console.log('Datos de cotización:', data);
     setTimeout(() => {
       setIsSubmitting(false);
-      alert('¡Cotización enviada! Te contactaremos pronto.');
+      alert(wizard.success);
     }, 1000);
   };
 
@@ -144,9 +114,8 @@ export default function WizardCotizacion() {
       {/* Encabezado: indicador de progreso */}
       <CardHeader className="bg-slate-800/50 border-b border-slate-700 pb-4">
         <p className="text-emerald-400 font-bold text-sm tracking-widest uppercase">
-          Paso {currentStep} de {TOTAL_STEPS}
+          {wizard.stepLabel(currentStep, TOTAL_STEPS)}
         </p>
-        {/* Barra de progreso */}
         <div className="w-full bg-slate-700 rounded-full h-2 mt-3">
           <div
             className="bg-emerald-500 h-2 rounded-full transition-all duration-500 ease-out"
@@ -157,22 +126,21 @@ export default function WizardCotizacion() {
 
       <CardContent className="p-8 min-h-[360px]">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* =========== PASO 1: Servicio y alcance =========== */}
+          {/* =========== PASO 1 =========== */}
           {currentStep === 1 && (
             <div className="animate-fade-in space-y-6">
-              <h2 className="text-3xl font-bold text-white">¿Qué necesitas?</h2>
+              <h2 className="text-3xl font-bold text-white">{wizard.step1.heading}</h2>
 
-              {/* Tipo de servicio */}
               <div className="space-y-3">
                 <Label htmlFor="serviceType" className="text-slate-300 text-sm">
-                  Selecciona el servicio principal
+                  {wizard.step1.serviceLabel}
                 </Label>
                 <Controller
                   name="serviceType"
                   control={control}
                   render={({ field }) => (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {SERVICE_OPTIONS.map((opt) => (
+                      {wizard.serviceOptions.map((opt) => (
                         <button
                           key={opt.value}
                           type="button"
@@ -197,15 +165,14 @@ export default function WizardCotizacion() {
                 )}
               </div>
 
-              {/* Alcance del proyecto */}
               <div className="space-y-2">
                 <Label htmlFor="projectScope" className="text-slate-300 text-sm">
-                  Cuéntanos brevemente sobre tu proyecto
+                  {wizard.step1.scopeLabel}
                 </Label>
                 <Textarea
                   id="projectScope"
                   {...register('projectScope')}
-                  placeholder="Ej: Quiero rediseñar mi sitio web y lanzar campañas en Meta Ads para aumentar ventas..."
+                  placeholder={wizard.step1.scopePlaceholder}
                   className="min-h-[100px] bg-slate-800 border-slate-700 text-slate-200 placeholder:text-slate-500 resize-none"
                 />
                 {errors.projectScope && (
@@ -215,15 +182,14 @@ export default function WizardCotizacion() {
             </div>
           )}
 
-          {/* =========== PASO 2: Presupuesto y tiempos =========== */}
+          {/* =========== PASO 2 =========== */}
           {currentStep === 2 && (
             <div className="animate-fade-in space-y-6">
-              <h2 className="text-3xl font-bold text-white">Presupuesto y Plazos</h2>
+              <h2 className="text-3xl font-bold text-white">{wizard.step2.heading}</h2>
 
-              {/* Rango de presupuesto */}
               <div className="space-y-2">
                 <Label htmlFor="budget" className="text-slate-300 text-sm">
-                  ¿Cuál es tu presupuesto estimado?
+                  {wizard.step2.budgetLabel}
                 </Label>
                 <Controller
                   name="budget"
@@ -231,10 +197,10 @@ export default function WizardCotizacion() {
                   render={({ field }) => (
                     <Select value={field.value} onValueChange={(v) => { field.onChange(v); trigger('budget'); }}>
                       <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-200">
-                        <SelectValue placeholder="Selecciona un rango" />
+                        <SelectValue placeholder={wizard.step2.budgetPlaceholder} />
                       </SelectTrigger>
                       <SelectContent className="bg-slate-800 border-slate-700">
-                        {BUDGET_OPTIONS.map((opt) => (
+                        {wizard.budgetOptions.map((opt) => (
                           <SelectItem key={opt.value} value={opt.value} className="text-slate-200 focus:bg-slate-700 focus:text-white">
                             {opt.label}
                           </SelectItem>
@@ -248,10 +214,9 @@ export default function WizardCotizacion() {
                 )}
               </div>
 
-              {/* Urgencia */}
               <div className="space-y-2">
                 <Label htmlFor="timeline" className="text-slate-300 text-sm">
-                  ¿Para cuándo lo necesitas?
+                  {wizard.step2.timelineLabel}
                 </Label>
                 <Controller
                   name="timeline"
@@ -259,10 +224,10 @@ export default function WizardCotizacion() {
                   render={({ field }) => (
                     <Select value={field.value} onValueChange={(v) => { field.onChange(v); trigger('timeline'); }}>
                       <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-200">
-                        <SelectValue placeholder="Selecciona la urgencia" />
+                        <SelectValue placeholder={wizard.step2.timelinePlaceholder} />
                       </SelectTrigger>
                       <SelectContent className="bg-slate-800 border-slate-700">
-                        {TIMELINE_OPTIONS.map((opt) => (
+                        {wizard.timelineOptions.map((opt) => (
                           <SelectItem key={opt.value} value={opt.value} className="text-slate-200 focus:bg-slate-700 focus:text-white">
                             {opt.label}
                           </SelectItem>
@@ -276,89 +241,68 @@ export default function WizardCotizacion() {
                 )}
               </div>
 
-              {/* Notas adicionales (opcional) */}
               <div className="space-y-2">
                 <Label htmlFor="extraNotes" className="text-slate-300 text-sm">
-                  Notas adicionales (opcional)
+                  {wizard.step2.notesLabel}
                 </Label>
                 <Textarea
                   id="extraNotes"
                   {...register('extraNotes')}
-                  placeholder="Cualquier detalle adicional que quieras compartir..."
+                  placeholder={wizard.step2.notesPlaceholder}
                   className="min-h-[80px] bg-slate-800 border-slate-700 text-slate-200 placeholder:text-slate-500 resize-none"
                 />
               </div>
             </div>
           )}
 
-          {/* =========== PASO 3: Datos de contacto =========== */}
+          {/* =========== PASO 3 =========== */}
           {currentStep === 3 && (
             <div className="animate-fade-in space-y-6">
-              <h2 className="text-3xl font-bold text-white">Tus Datos</h2>
-              <p className="text-slate-400 text-sm -mt-4">
-                Déjanos tus datos y te enviaremos la cotización en menos de 24 horas.
-              </p>
+              <h2 className="text-3xl font-bold text-white">{wizard.step3.heading}</h2>
+              <p className="text-slate-400 text-sm -mt-4">{wizard.step3.description}</p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Nombre completo */}
                 <div className="space-y-2">
-                  <Label htmlFor="fullName" className="text-slate-300 text-sm">
-                    Nombre completo
-                  </Label>
+                  <Label htmlFor="fullName" className="text-slate-300 text-sm">{wizard.step3.fullName}</Label>
                   <Input
                     id="fullName"
                     {...register('fullName')}
-                    placeholder="Ej: Ana García"
+                    placeholder={wizard.step3.fullNamePlaceholder}
                     className="bg-slate-800 border-slate-700 text-slate-200 placeholder:text-slate-500"
                   />
-                  {errors.fullName && (
-                    <p className="text-red-400 text-xs">{errors.fullName.message}</p>
-                  )}
+                  {errors.fullName && <p className="text-red-400 text-xs">{errors.fullName.message}</p>}
                 </div>
 
-                {/* Correo electrónico */}
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-slate-300 text-sm">
-                    Correo electrónico
-                  </Label>
+                  <Label htmlFor="email" className="text-slate-300 text-sm">{wizard.step3.email}</Label>
                   <Input
                     id="email"
                     type="email"
                     {...register('email')}
-                    placeholder="ana@empresa.com"
+                    placeholder={wizard.step3.emailPlaceholder}
                     className="bg-slate-800 border-slate-700 text-slate-200 placeholder:text-slate-500"
                   />
-                  {errors.email && (
-                    <p className="text-red-400 text-xs">{errors.email.message}</p>
-                  )}
+                  {errors.email && <p className="text-red-400 text-xs">{errors.email.message}</p>}
                 </div>
 
-                {/* Empresa */}
                 <div className="space-y-2">
-                  <Label htmlFor="company" className="text-slate-300 text-sm">
-                    Empresa
-                  </Label>
+                  <Label htmlFor="company" className="text-slate-300 text-sm">{wizard.step3.company}</Label>
                   <Input
                     id="company"
                     {...register('company')}
-                    placeholder="Nombre de tu empresa"
+                    placeholder={wizard.step3.companyPlaceholder}
                     className="bg-slate-800 border-slate-700 text-slate-200 placeholder:text-slate-500"
                   />
-                  {errors.company && (
-                    <p className="text-red-400 text-xs">{errors.company.message}</p>
-                  )}
+                  {errors.company && <p className="text-red-400 text-xs">{errors.company.message}</p>}
                 </div>
 
-                {/* Teléfono (opcional) */}
                 <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-slate-300 text-sm">
-                    Teléfono (opcional)
-                  </Label>
+                  <Label htmlFor="phone" className="text-slate-300 text-sm">{wizard.step3.phone}</Label>
                   <Input
                     id="phone"
                     type="tel"
                     {...register('phone')}
-                    placeholder="+52 55 1234 5678"
+                    placeholder={wizard.step3.phonePlaceholder}
                     className="bg-slate-800 border-slate-700 text-slate-200 placeholder:text-slate-500"
                   />
                 </div>
@@ -379,7 +323,7 @@ export default function WizardCotizacion() {
             currentStep === 1 ? 'text-slate-600' : 'text-slate-300 hover:text-white hover:bg-slate-800'
           }`}
         >
-          ← Anterior
+          {wizard.back}
         </Button>
 
         {currentStep < TOTAL_STEPS ? (
@@ -388,7 +332,7 @@ export default function WizardCotizacion() {
             onClick={handleNext}
             className="rounded-full px-8 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg transition-all"
           >
-            Siguiente →
+            {wizard.next}
           </Button>
         ) : (
           <Button
@@ -397,7 +341,7 @@ export default function WizardCotizacion() {
             disabled={isSubmitting}
             className="rounded-full px-8 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg transition-all"
           >
-            {isSubmitting ? 'Enviando...' : 'Enviar Cotización'}
+            {isSubmitting ? wizard.submitting : wizard.submit}
           </Button>
         )}
       </CardFooter>
