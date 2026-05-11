@@ -1,18 +1,24 @@
 import React from 'react';
 import HeroSection from '../components/HeroSection';
 import PortafolioGrid from '../components/PortafolioGrid';
+import ServiciosSection from '../components/ServiciosSection';
 
 /**
  * Página Home (Inicio)
- * * Agrupa los componentes de la vista principal.
+ * * Agrupa los componentes de la vista principal con anclas para navegación.
  */
-const Home = () => {
+export default function Home() {
   return (
     <>
-      <HeroSection />
-      <PortafolioGrid />
+      <div id="inicio">
+        <HeroSection />
+      </div>
+      <div id="portafolio">
+        <PortafolioGrid />
+      </div>
+      <div id="servicios">
+        <ServiciosSection />
+      </div>
     </>
   );
-};
-
-export default Home;
+}

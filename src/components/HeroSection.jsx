@@ -1,11 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { STRINGS } from '../i18n/strings';
 
 /**
  * Componente HeroSection
  * * Sección principal full-viewport con titulares, descripción y CTAs.
- * * Usa shadcn Button para los CTAs con variantes y estilos custom.
+ * * CTAs con navegación real: "Cotizar Proyecto" → /cotizar, "Nuestros Servicios" → /#servicios.
  */
 export default function HeroSection() {
   const { hero } = STRINGS;
@@ -34,14 +35,14 @@ export default function HeroSection() {
           {hero.description}
         </p>
 
-        {/* CTAs con shadcn Button */}
+        {/* CTAs con navegación real */}
         <div className="mt-14 flex flex-col sm:flex-row gap-6 justify-center items-center">
           <Button
             asChild
             size="lg"
             className="rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-xl shadow-emerald-900/20"
           >
-            <a href="#">{hero.ctaPrimary}</a>
+            <Link to="/cotizar">{hero.ctaPrimary}</Link>
           </Button>
 
           <Button
@@ -50,7 +51,7 @@ export default function HeroSection() {
             size="lg"
             className="rounded-full border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-200 font-semibold"
           >
-            <a href="#">
+            <a href="/#servicios">
               {hero.ctaSecondary}
               <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
             </a>
