@@ -5,12 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "api": "node backend/server.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "crear-tailwind": "tailwindcss init -p"
   },
   "dependencies": {
+    "dotenv": "^17.4.2",
+    "mysql2": "^3.22.3",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-router-dom": "^7.14.2"

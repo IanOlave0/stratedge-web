@@ -1,70 +1,56 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 
-/**
- * Componente HeroSection (Ajuste Perfecto al Viewport)
- * * Renderiza la sección principal usando un cálculo exacto de altura.
- * Se resta la altura aproximada del Navbar (5rem u 80px) al 100vh 
- * para evitar el desbordamiento (overflow) vertical.
- */
 const HeroSection = () => {
   return (
-    /**
-     * Contenedor de la Sección
-     * - 'min-h-[calc(100vh-5rem)]': Calcula dinámicamente el alto exacto de la pantalla MENOS el Navbar.
-     * - 'flex items-center': Centra el contenido verticalmente en este espacio perfectamente medido.
-     * - 'overflow-hidden': Asegura que la decoración de fondo no se salga de los márgenes.
-     */
     <section className="relative min-h-[calc(100vh-5rem)] flex items-center bg-slate-950 overflow-hidden">
-      
-      {/* Decoración de fondo sutil */}
-      <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-emerald-900/20 blur-[120px] rounded-full pointer-events-none"></div>
+      <div className="absolute inset-0 opacity-20 bg-[linear-gradient(90deg,rgba(16,185,129,0.18)_1px,transparent_1px),linear-gradient(0deg,rgba(148,163,184,0.12)_1px,transparent_1px)] bg-[size:72px_72px] pointer-events-none" />
 
-      <div className="container mx-auto px-6 text-center flex flex-col items-center relative z-10">
-        
-        {/* Antetítulo / Subtítulo */}
-        <p className="text-emerald-400 font-semibold tracking-widest uppercase text-sm mb-6 animate-fade-in">
-          Agencia de Marketing Digital & Estrategia Avanzada
-        </p>
+      <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-[1.05fr_0.95fr] gap-12 items-center py-16">
+        <div>
+          <p className="text-emerald-400 font-semibold tracking-widest uppercase text-sm mb-6">
+            Marketing digital para negocios en California
+          </p>
 
-        {/* Titular Principal (H1) */}
-        <h1 className="text-5xl md:text-8xl font-extrabold tracking-tight leading-[1.1] max-w-6xl">
-          <span className="block text-white">Estrategias que Impulsan.</span>
-          <span className="block bg-gradient-to-r from-emerald-400 to-emerald-600 bg-clip-text text-transparent">
-            Resultados que Perduran.
-          </span>
-        </h1>
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.05] max-w-5xl text-white">
+            Estrategia, creatividad y campanas para atraer nuevos clientes.
+          </h1>
 
-        {/* Descripción de Apoyo */}
-        <p className="mt-10 text-xl md:text-2xl text-slate-400 max-w-3xl leading-relaxed font-light">
-          En Stratedge Marketing LLC, fusionamos análisis de precisión con creatividad 
-          de alto impacto para transformar su visión en crecimiento sostenible.
-        </p>
+          <p className="mt-8 text-xl text-slate-300 max-w-3xl leading-relaxed font-light">
+            Stratedge Marketing ayuda a pequenas empresas, emprendedores y marcas locales a mejorar su presencia digital con sitios web, publicidad, redes sociales, branding y contenido visual.
+          </p>
 
-        {/* Grupo de Llamados a la Acción (CTA) */}
-        <div className="mt-14 flex flex-col sm:flex-row gap-6 justify-center items-center w-full sm:w-auto">
-          
-          <a
-            href="#"
-            className="w-full sm:w-auto px-12 py-5 bg-emerald-600 text-white font-bold rounded-full text-lg shadow-xl hover:bg-emerald-500 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-emerald-900/40"
-          >
-            Cotizar Proyecto
-          </a>
-          
-          <a
-            href="#"
-            className="w-full sm:w-auto px-12 py-5 bg-slate-900 text-slate-100 font-semibold rounded-full text-lg border border-slate-800 hover:bg-slate-800 transition-all duration-300 group"
-          >
-            Nuestros Servicios
-            <span className="inline-block ml-2 transition-transform group-hover:translate-x-1">→</span>
-          </a>
-          
+          <div className="mt-10 flex flex-col sm:flex-row gap-4">
+            <Link
+              to="/cotizar"
+              className="px-8 py-4 bg-emerald-600 text-white font-bold rounded-full text-center shadow-xl hover:bg-emerald-500 transition-all duration-300"
+            >
+              Cotizar proyecto
+            </Link>
+
+            <a
+              href="#portfolio"
+              className="px-8 py-4 bg-slate-900 text-slate-100 font-semibold rounded-full text-center border border-slate-700 hover:bg-slate-800 transition-all duration-300"
+            >
+              Ver portafolio
+            </a>
+          </div>
         </div>
 
-        {/* Indicador visual de scroll */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce hidden md:block">
-            <div className="w-1 h-10 rounded-full bg-gradient-to-b from-emerald-500 to-transparent opacity-50"></div>
+        <div className="bg-slate-900/80 border border-slate-800 rounded-lg p-6 shadow-2xl">
+          <div className="grid grid-cols-2 gap-4">
+            {[
+              ['San Jose, CA', 'Mercado principal'],
+              ['Colima, MX', 'Soporte creativo'],
+              ['Bilingue', 'Espanol / ingles'],
+              ['Base de datos', 'Leads y portafolio'],
+            ].map(([value, label]) => (
+              <div key={value} className="bg-slate-950 border border-slate-800 rounded-lg p-5">
+                <p className="text-2xl font-extrabold text-white">{value}</p>
+                <p className="text-sm text-slate-400 mt-2">{label}</p>
+              </div>
+            ))}
+          </div>
         </div>
-
       </div>
     </section>
   );

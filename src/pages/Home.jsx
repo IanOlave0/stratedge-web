@@ -1,15 +1,12 @@
-import React from 'react';
 import HeroSection from '../components/HeroSection';
+import ServicesSection from '../components/ServicesSection';
 import PortafolioGrid from '../components/PortafolioGrid';
 
-/**
- * Página Home (Inicio)
- * * Agrupa los componentes de la vista principal.
- */
 const Home = () => {
   return (
     <>
       <HeroSection />
+      <ServicesSection />
       <PortafolioGrid />
     </>
   );
