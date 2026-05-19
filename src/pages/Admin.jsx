@@ -10,8 +10,6 @@ const Admin = () => {
   const [leads, setLeads] = useState([]);
   const [projects, setProjects] = useState([]);
   const [project, setProject] = useState(emptyProject);
-  const [query, setQuery] = useState('SELECT * FROM leads ORDER BY id DESC');
-  const [rows, setRows] = useState([]);
   const [error, setError] = useState('');
 
   const loadAdminData = async () => {
@@ -49,17 +47,6 @@ const Admin = () => {
     await api.createProject(project);
     setProject(emptyProject);
     await loadAdminData();
-  };
-
-  const runSelect = async (event) => {
-    event.preventDefault();
-    setError('');
-    try {
-      const result = await api.runSelect(query);
-      setRows(result.rows);
-    } catch (err) {
-      setError(err.error || 'Consulta no permitida.');
-    }
   };
 
   if (!logged) {
@@ -118,15 +105,6 @@ const Admin = () => {
               <input key={key} required value={project[key]} placeholder={key} onChange={(e) => setProject({ ...project, [key]: e.target.value })} className="w-full rounded-lg bg-slate-950 border border-slate-700 text-white px-4 py-3" />
             ))}
             <button className="bg-emerald-600 text-white font-bold rounded-full px-6 py-3">Guardar proyecto</button>
-          </form>
-
-          <form onSubmit={runSelect} className="bg-slate-900 border border-slate-800 rounded-lg p-6">
-            <h2 className="text-2xl font-bold text-white">Ejecutar SELECT</h2>
-            <p className="text-slate-400 mt-2 mb-4">Por seguridad solo se permiten consultas SELECT.</p>
-            {error && <p className="text-red-300 mb-4">{error}</p>}
-            <textarea value={query} onChange={(e) => setQuery(e.target.value)} rows="5" className="w-full rounded-lg bg-slate-950 border border-slate-700 text-white px-4 py-3 font-mono" />
-            <button className="mt-4 bg-emerald-600 text-white font-bold rounded-full px-6 py-3">Ejecutar consulta</button>
-            <pre className="mt-4 bg-slate-950 text-slate-300 rounded-lg p-4 overflow-auto text-xs">{JSON.stringify(rows, null, 2)}</pre>
           </form>
         </section>
 

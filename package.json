@@ -1,5 +1,5 @@
 {
-  "name": "stratedge-app",
+  "name": "agencia-digital-mx",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -33,7 +33,7 @@
     "tailwindcss": "^4.2.4",
     "vite": "^8.0.9"
   },
-  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "description": "Aplicacion web escolar full stack para una agencia digital con React, Node.js y MySQL.",
   "main": "eslint.config.js",
   "keywords": [],
   "author": "",

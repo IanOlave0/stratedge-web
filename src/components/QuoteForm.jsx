@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../utils/api';
-import { getTodayDate, sanitizeContactField, validateContact, validationRules } from '../utils/validation';
+import { getTodayDate, sanitizeContactField, validateContact } from '../utils/validation';
 
 const initialContact = {
   fullName: '',
@@ -89,7 +89,6 @@ const QuoteForm = () => {
         <label className="block mt-4">
           <span className="text-sm font-semibold text-slate-300">Notas del proyecto</span>
           <textarea name="message" rows="4" value={contact.message} onChange={changeContact} maxLength="500" className="mt-2 w-full rounded-lg bg-slate-950 border border-slate-700 text-white px-4 py-3 focus:outline-none focus:border-emerald-500" />
-          <p className="text-slate-500 text-xs mt-2">{validationRules.message.help}</p>
           {errors.message && <p className="text-red-300 text-sm mt-2">{errors.message}</p>}
         </label>
 
@@ -98,9 +97,12 @@ const QuoteForm = () => {
         </button>
 
         {result && (
-          <p className="mt-6 text-emerald-300 font-semibold">
-            Lead guardado en la base de datos. Estimado aproximado: ${result.estimatedTotal.toLocaleString('en-US')} USD.
-          </p>
+          <div className="mt-8 rounded-lg border border-emerald-700 bg-emerald-950/30 p-5">
+            <p className="text-emerald-300 font-semibold">
+              Cotizacion guardada. Estimado aproximado: ${result.estimatedTotal.toLocaleString('en-US')} USD.
+            </p>
+            <p className="mt-2 text-slate-300 text-sm">La solicitud quedo registrada para seguimiento.</p>
+          </div>
         )}
       </form>
     </div>
@@ -111,7 +113,6 @@ const ContactInput = ({ name, label, value, onChange, error, type = 'text', requ
   <label className="block mt-4 md:mt-0">
     <span className="text-sm font-semibold text-slate-300">{label}</span>
     <input name={name} type={type} required={required} value={value} onChange={onChange} inputMode={numeric ? 'numeric' : undefined} maxLength={maxLength} pattern={pattern} min={min} className="mt-2 w-full rounded-lg bg-slate-950 border border-slate-700 text-white px-4 py-3 focus:outline-none focus:border-emerald-500" />
-    <p className="text-slate-500 text-xs mt-2">{validationRules[name].help}</p>
     {error && <p className="text-red-300 text-sm mt-2">{error}</p>}
   </label>
 );

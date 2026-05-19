@@ -2,16 +2,16 @@ import 'dotenv/config';
 import { createServer } from 'node:http';
 import { createToken, revokeToken, verifyToken } from './auth.js';
 import { dbConfig, initDatabase, pool, verifyPassword } from './db.js';
-import { isSafeSelect, validateLead, validateProject } from './validation.js';
+import { validateLead, validateProject } from './validation.js';
 
 const PORT = Number(process.env.PORT || 4000);
-const ORIGIN = process.env.FRONTEND_ORIGIN || 'http://localhost:5173';
+const ALLOWED_ORIGINS = ['http://localhost:5173', 'http://127.0.0.1:5173'];
 const rateLimit = new Map();
 
 const json = (res, status, data) => {
   res.writeHead(status, {
     'Content-Type': 'application/json; charset=utf-8',
-    'Access-Control-Allow-Origin': ORIGIN,
+    'Access-Control-Allow-Origin': ALLOWED_ORIGINS.includes(res.req?.headers.origin) ? res.req.headers.origin : 'http://localhost:5173',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
     'X-Content-Type-Options': 'nosniff',
@@ -119,7 +119,7 @@ const handle = async (req, res) => {
       SELECT leads.id, full_name AS fullName, email, phone, zip_code AS zipCode, company,
              campaign_start AS campaignStart, social_links AS socialLinks, message,
              service_id AS serviceId, services.name AS serviceName,
-             estimated_total AS estimatedTotal, status, leads.created_at AS createdAt
+             estimated_total AS estimatedTotal, leads.status, leads.created_at AS createdAt
       FROM leads
       JOIN services ON services.id = leads.service_id
       ORDER BY leads.id DESC
@@ -153,14 +153,6 @@ const handle = async (req, res) => {
     if (!requireAdmin(req, res)) return;
     const [result] = await pool.execute('DELETE FROM portfolio_projects WHERE id = ?', [projectMatch[1]]);
     return json(res, result.affectedRows ? 200 : 404, { ok: Boolean(result.affectedRows) });
-  }
-
-  if (routeKey === 'POST /api/admin/sql') {
-    if (!requireAdmin(req, res)) return;
-    const body = await readBody(req);
-    if (!isSafeSelect(body.query)) return json(res, 400, { error: 'Solo se permiten consultas SELECT seguras.' });
-    const [rows] = await pool.query(body.query);
-    return json(res, 200, { rows });
   }
 
   return json(res, 404, { error: 'Ruta no encontrada.' });

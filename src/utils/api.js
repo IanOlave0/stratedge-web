@@ -35,6 +35,5 @@ export const api = {
   updateLeadStatus: (id, status) => request(`/leads/${id}/status`, { method: 'PUT', body: JSON.stringify({ status }) }),
   createProject: (project) => request('/portfolio', { method: 'POST', body: JSON.stringify(project) }),
   deleteProject: (id) => request(`/portfolio/${id}`, { method: 'DELETE' }),
-  runSelect: (query) => request('/admin/sql', { method: 'POST', body: JSON.stringify({ query }) }),
   hasToken: () => Boolean(localStorage.getItem(TOKEN_KEY)),
 };

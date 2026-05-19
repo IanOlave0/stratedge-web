@@ -55,10 +55,3 @@ export const validateProject = (body) => {
   if (!patterns.imageUrl.test(value.image)) errors.image = 'URL de imagen invalida.';
   return { value, errors };
 };
-
-export const isSafeSelect = (query) => {
-  const normalized = String(query || '').trim().replace(/\s+/g, ' ').toLowerCase();
-  return normalized.startsWith('select ')
-    && !/;\s*\S/.test(normalized)
-    && !/\b(insert|update|delete|drop|alter|create|replace|pragma|attach|detach)\b/.test(normalized);
-};

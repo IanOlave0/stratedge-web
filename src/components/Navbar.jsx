@@ -12,7 +12,6 @@ const Navbar = () => {
           <li><Link to="/" className="hover:text-emerald-400 transition-colors">Inicio</Link></li>
           <li><a href="/#services" className="hover:text-emerald-400 transition-colors">Servicios</a></li>
           <li><a href="/#portfolio" className="hover:text-emerald-400 transition-colors">Portafolio</a></li>
-          <li><Link to="/admin" className="hover:text-emerald-400 transition-colors">Administrador</Link></li>
         </ul>
 
         <Link

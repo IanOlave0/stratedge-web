@@ -42,7 +42,7 @@ const HeroSection = () => {
               ['San Jose, CA', 'Mercado principal'],
               ['Colima, MX', 'Soporte creativo'],
               ['Bilingue', 'Espanol / ingles'],
-              ['Base de datos', 'Leads y portafolio'],
+              ['Cotizacion', 'Respuesta rapida'],
             ].map(([value, label]) => (
               <div key={value} className="bg-slate-950 border border-slate-800 rounded-lg p-5">
                 <p className="text-2xl font-extrabold text-white">{value}</p>

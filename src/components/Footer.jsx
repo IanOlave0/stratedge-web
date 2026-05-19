@@ -14,7 +14,6 @@ const Footer = () => {
 
         <div className="flex flex-wrap justify-center gap-5 text-sm">
           <Link to="/cotizar" className="hover:text-emerald-400 transition-colors">Cotizar</Link>
-          <Link to="/admin" className="hover:text-emerald-400 transition-colors">Administrador</Link>
           <a href="mailto:contact@stratedgemarketing.com" className="hover:text-emerald-400 transition-colors">Correo</a>
           <a href="https://instagram.com" className="hover:text-emerald-400 transition-colors">Instagram</a>
         </div>
