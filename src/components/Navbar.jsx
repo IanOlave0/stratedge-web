@@ -5,7 +5,7 @@ const Navbar = () => {
     <nav className="bg-slate-900 text-white shadow-lg sticky top-0 z-50 border-b border-slate-800">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
         <Link to="/" className="text-xl md:text-2xl font-extrabold tracking-tight">
-          <span className="text-emerald-400">Stratedge</span> Marketing
+          <span className="text-emerald-400">Agencia</span> Digital MX
         </Link>
 
         <ul className="hidden lg:flex space-x-8 text-sm font-medium text-slate-300">

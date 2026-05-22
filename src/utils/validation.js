@@ -1,5 +1,7 @@
 const today = new Date().toISOString().split('T')[0];
 
+// Expresiones regulares que limitan caracteres permitidos en el formulario.
+// Ayudan a prevenir datos invalidos y entradas con simbolos peligrosos.
 const patterns = {
   fullName: /^[A-Za-zÀ-ÿÑñ' -]{3,80}$/,
   email: /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]{2,}$/,
@@ -11,6 +13,7 @@ const patterns = {
   message: /^[A-Za-z0-9À-ÿÑñ .,;:!?¿¡'"()@%+\-/$\n\r]{0,500}$/,
 };
 
+// Reglas usadas por el formulario antes de enviar datos al backend.
 export const validationRules = {
   fullName: {
     help: 'Permitido: letras, espacios, apostrofe y guion.',
@@ -29,7 +32,7 @@ export const validationRules = {
   },
   zipCode: {
     help: 'Permitido: solo numeros, 5 digitos.',
-    error: 'El ZIP code debe tener 5 digitos.',
+    error: 'El codigo postal debe tener 5 digitos.',
     validate: (value) => value === '' || patterns.zipCode.test(value),
   },
   company: {
@@ -54,6 +57,7 @@ export const validationRules = {
   },
 };
 
+// Limpia el valor mientras el usuario escribe para evitar caracteres no validos.
 export const sanitizeContactField = (name, value) => {
   if (name === 'phone') return value.replace(/\D/g, '').slice(0, 10);
   if (name === 'zipCode') return value.replace(/\D/g, '').slice(0, 5);
@@ -64,6 +68,7 @@ export const sanitizeContactField = (name, value) => {
   return value;
 };
 
+// Devuelve un objeto de errores por campo; si esta vacio, el formulario es valido.
 export const validateContact = (contact) =>
   Object.entries(validationRules).reduce((errors, [field, rule]) => {
     if (!rule.validate(contact[field] || '')) {

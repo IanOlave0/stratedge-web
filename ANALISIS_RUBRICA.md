@@ -8,8 +8,8 @@ La rubrica evalua un proyecto Full Stack, no solo Frontend. El proyecto actual y
 
 | Criterio | Peso | Estado actual | Riesgo |
 |---|---:|---|---|
-| Frontend - vistas y componentes | 10% | Home, servicios, portafolio y cotizador existen | Bajo |
-| Validaciones Frontend | 10% | Hay reglas para nombre, email, telefono, ZIP, fecha, links y notas | Bajo |
+| Frontend - vistas y componentes | 10% | Inicio, servicios, portafolio y cotizador existen | Bajo |
+| Validaciones Frontend | 10% | Hay reglas para nombre, correo, telefono, codigo postal, fecha, enlaces y notas | Bajo |
 | CSS y diseno responsivo | 10% | Usa Tailwind y layout responsive | Bajo/medio |
 | Backend - API RESTful | 15% | No existe backend Node/Express | Alto |
 | Base de datos y conectividad | 15% | No hay MySQL/Mongo real; se usa localStorage | Alto |
@@ -37,7 +37,7 @@ Crear una carpeta `backend/` con servidor Express y endpoints REST:
 La rubrica pide persistencia real y CRUD. Opciones:
 
 - MySQL + phpMyAdmin, recomendado si el profesor lo espera.
-- SQLite, mas facil para demo local.
+- SQLite, mas facil para prueba local.
 - MongoDB, si aceptan documentos.
 
 Para tu reporte original, lo mas alineado es MySQL.
@@ -56,7 +56,7 @@ Repetir en servidor las validaciones del frontend:
 
 - email valido
 - telefono de 10 digitos
-- ZIP de 5 digitos
+- Codigo postal de 5 digitos
 - fecha no pasada
 - longitud maxima
 - bloqueo de caracteres de script
@@ -113,4 +113,3 @@ Validaciones:
 3. Cambiar `localStorage` por peticiones `fetch` al backend.
 4. Agregar validaciones backend y seguridad basica.
 5. Actualizar README y guia de verificacion.
-

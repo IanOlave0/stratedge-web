@@ -7,7 +7,7 @@ const Footer = () => {
     <footer className="bg-slate-900 text-slate-400 py-8 border-t border-slate-800">
       <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="text-center md:text-left">
-          <span className="text-emerald-400 font-bold text-lg">Stratedge</span> Marketing LLC
+          <span className="text-emerald-400 font-bold text-lg">Agencia</span> Digital MX
           <p className="text-sm mt-1">San Jose, California | Colima, Mexico</p>
           <p className="text-sm mt-1">© {currentYear} Todos los derechos reservados.</p>
         </div>

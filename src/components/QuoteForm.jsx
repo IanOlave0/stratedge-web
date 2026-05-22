@@ -14,6 +14,8 @@ const initialContact = {
 };
 
 const QuoteForm = () => {
+  // Estados principales del cotizador: datos del cliente, servicios,
+  // errores de validacion y resultado devuelto por la API.
   const [contact, setContact] = useState(initialContact);
   const [services, setServices] = useState([]);
   const [serviceId, setServiceId] = useState('');
@@ -21,6 +23,8 @@ const QuoteForm = () => {
   const [result, setResult] = useState(null);
   const [apiError, setApiError] = useState('');
 
+  // Al cargar el componente se consultan los servicios reales desde MySQL
+  // por medio del backend.
   useEffect(() => {
     api.getServices()
       .then((rows) => {
@@ -32,12 +36,14 @@ const QuoteForm = () => {
 
   const service = services.find((item) => item.id === serviceId);
 
+  // Actualiza campos del formulario aplicando sanitizacion inmediata.
   const changeContact = (event) => {
     const { name, value } = event.target;
     setContact((current) => ({ ...current, [name]: sanitizeContactField(name, value) }));
     setErrors((current) => ({ ...current, [name]: '' }));
   };
 
+  // Valida el formulario y envia la solicitud al backend para guardarla.
   const submitLead = async (event) => {
     event.preventDefault();
     setApiError('');
@@ -79,7 +85,7 @@ const QuoteForm = () => {
           <ContactInput name="fullName" label="Nombre completo" value={contact.fullName} onChange={changeContact} error={errors.fullName} required />
           <ContactInput name="email" label="Correo electronico" type="email" value={contact.email} onChange={changeContact} error={errors.email} required />
           <ContactInput name="phone" label="Telefono" type="tel" value={contact.phone} onChange={changeContact} error={errors.phone} required numeric maxLength={10} pattern="\d{10}" />
-          <ContactInput name="zipCode" label="ZIP code" value={contact.zipCode} onChange={changeContact} error={errors.zipCode} numeric maxLength={5} pattern="\d{5}" />
+          <ContactInput name="zipCode" label="Codigo postal" value={contact.zipCode} onChange={changeContact} error={errors.zipCode} numeric maxLength={5} pattern="\d{5}" />
           <ContactInput name="company" label="Empresa" value={contact.company} onChange={changeContact} error={errors.company} />
           <ContactInput name="campaignStart" label="Fecha de inicio de campana" type="date" value={contact.campaignStart} onChange={changeContact} error={errors.campaignStart} min={getTodayDate()} />
         </div>
@@ -93,7 +99,7 @@ const QuoteForm = () => {
         </label>
 
         <button className="mt-8 px-8 py-3 bg-emerald-600 text-white font-bold rounded-full shadow-lg hover:bg-emerald-500 transition-all disabled:bg-slate-700" disabled={!serviceId}>
-          Guardar lead validado
+          Guardar solicitud validada
         </button>
 
         {result && (

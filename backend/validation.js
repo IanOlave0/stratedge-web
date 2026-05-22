@@ -1,3 +1,5 @@
+// Patrones del backend. Repiten las reglas criticas porque el frontend puede
+// ser manipulado; la API siempre debe validar antes de guardar en MySQL.
 const patterns = {
   fullName: /^[A-Za-zÀ-ÿÑñ' -]{3,80}$/,
   email: /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]{2,}$/,
@@ -14,6 +16,7 @@ const patterns = {
 const today = () => new Date().toISOString().split('T')[0];
 const clean = (value = '') => String(value).trim();
 
+// Valida y normaliza los datos enviados desde el cotizador publico.
 export const validateLead = (body) => {
   const value = {
     fullName: clean(body.fullName),
@@ -30,7 +33,7 @@ export const validateLead = (body) => {
   if (!patterns.fullName.test(value.fullName)) errors.fullName = 'Nombre invalido.';
   if (!patterns.email.test(value.email)) errors.email = 'Correo invalido.';
   if (!patterns.phone.test(value.phone)) errors.phone = 'El telefono debe tener 10 digitos.';
-  if (value.zipCode && !patterns.zipCode.test(value.zipCode)) errors.zipCode = 'El ZIP debe tener 5 digitos.';
+  if (value.zipCode && !patterns.zipCode.test(value.zipCode)) errors.zipCode = 'El codigo postal debe tener 5 digitos.';
   if (!patterns.company.test(value.company)) errors.company = 'Empresa invalida.';
   if (value.campaignStart && (!patterns.date.test(value.campaignStart) || value.campaignStart < today())) errors.campaignStart = 'Fecha invalida.';
   if (!patterns.socialLinks.test(value.socialLinks)) errors.socialLinks = 'Links invalidos.';
@@ -39,6 +42,7 @@ export const validateLead = (body) => {
   return { value, errors };
 };
 
+// Valida proyectos agregados desde el panel privado de administracion.
 export const validateProject = (body) => {
   const value = {
     title: clean(body.title),

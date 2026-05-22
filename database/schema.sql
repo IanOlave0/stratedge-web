@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS leads (
   message VARCHAR(500),
   service_id VARCHAR(50) NOT NULL,
   estimated_total INT NOT NULL,
-  status ENUM('Nuevo lead', 'Contactado', 'En cotizacion', 'Cliente activo', 'Cerrado') NOT NULL DEFAULT 'Nuevo lead',
+  status ENUM('Nueva solicitud', 'Contactado', 'En cotizacion', 'Cliente activo', 'Cerrado') NOT NULL DEFAULT 'Nueva solicitud',
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_leads_services FOREIGN KEY (service_id) REFERENCES services(id)
 );
@@ -47,21 +47,21 @@ CREATE TABLE IF NOT EXISTS admins (
 );
 
 INSERT IGNORE INTO services (id, name, category, base_price, description) VALUES
-('web', 'Desarrollo Web', 'Digital', 1200, 'Sitios web corporativos, landing pages y portafolios responsivos.'),
+('web', 'Desarrollo Web', 'Digital', 1200, 'Sitios web corporativos, paginas de aterrizaje y portafolios responsivos.'),
 ('redes', 'Manejo de Redes Sociales', 'Digital', 650, 'Planeacion de contenido, publicaciones y administracion mensual.'),
-('ads', 'Google Ads y Campanas', 'Publicidad', 800, 'Estructura, lanzamiento y optimizacion de campanas pagadas.'),
-('branding', 'Branding e Identidad', 'Creativo', 900, 'Logo, slogan, guia basica de marca e identidad visual.'),
+('ads', 'Anuncios en Google y Campanas', 'Publicidad', 800, 'Estructura, lanzamiento y optimizacion de campanas pagadas.'),
+('branding', 'Identidad de Marca', 'Creativo', 900, 'Logo, slogan, guia basica de marca e identidad visual.'),
 ('foto-video', 'Foto y Video Profesional', 'Creativo', 700, 'Produccion de contenido visual para campanas digitales.'),
 ('editorial', 'Diseno Editorial', 'Impresos', 500, 'Menus, catalogos, revistas, folletos y materiales fisicos.');
 
 INSERT INTO portfolio_projects (title, client, category, description, image)
-SELECT 'Campana para restaurante local', 'California Restaurant Group', 'Redes Sociales', 'Contenido mensual y anuncios para incrementar reservaciones y visibilidad local.', 'https://placehold.co/900x600/0f172a/34d399?text=Campana+Restaurante'
+SELECT 'Campana para restaurante local', 'Grupo Restaurantero California', 'Redes Sociales', 'Contenido mensual y anuncios para incrementar reservaciones y visibilidad local.', 'https://placehold.co/900x600/0f172a/34d399?text=Campana+Restaurante'
 WHERE NOT EXISTS (SELECT 1 FROM portfolio_projects WHERE title = 'Campana para restaurante local');
 
 INSERT INTO portfolio_projects (title, client, category, description, image)
-SELECT 'Identidad visual para empresa de servicios', 'Bay Area Services', 'Branding', 'Logo, slogan, colores y materiales iniciales para una marca bilingue.', 'https://placehold.co/900x600/0f172a/34d399?text=Branding'
+SELECT 'Identidad visual para empresa de servicios', 'Servicios Bahia', 'Identidad de Marca', 'Logo, slogan, colores y materiales iniciales para una marca bilingue.', 'https://placehold.co/900x600/0f172a/34d399?text=Identidad+de+Marca'
 WHERE NOT EXISTS (SELECT 1 FROM portfolio_projects WHERE title = 'Identidad visual para empresa de servicios');
 
 INSERT INTO portfolio_projects (title, client, category, description, image)
-SELECT 'Sitio web corporativo', 'Small Business Portfolio', 'Desarrollo Web', 'Sitio responsivo con portafolio, formulario y estructura SEO local.', 'https://placehold.co/900x600/0f172a/34d399?text=Sitio+Web'
+SELECT 'Sitio web corporativo', 'Portafolio de Negocios Locales', 'Desarrollo Web', 'Sitio responsivo con portafolio, formulario y estructura de posicionamiento local.', 'https://placehold.co/900x600/0f172a/34d399?text=Sitio+Web'
 WHERE NOT EXISTS (SELECT 1 FROM portfolio_projects WHERE title = 'Sitio web corporativo');

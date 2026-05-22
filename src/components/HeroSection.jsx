@@ -8,7 +8,7 @@ const HeroSection = () => {
       <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-[1.05fr_0.95fr] gap-12 items-center py-16">
         <div>
           <p className="text-emerald-400 font-semibold tracking-widest uppercase text-sm mb-6">
-            Marketing digital para negocios en California
+            Mercadotecnia digital para negocios en California
           </p>
 
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.05] max-w-5xl text-white">
@@ -16,7 +16,7 @@ const HeroSection = () => {
           </h1>
 
           <p className="mt-8 text-xl text-slate-300 max-w-3xl leading-relaxed font-light">
-            Stratedge Marketing ayuda a pequenas empresas, emprendedores y marcas locales a mejorar su presencia digital con sitios web, publicidad, redes sociales, branding y contenido visual.
+            Agencia Digital MX ayuda a pequenas empresas, emprendedores y marcas locales a mejorar su presencia digital con sitios web, publicidad, redes sociales, identidad de marca y contenido visual.
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row gap-4">
@@ -41,7 +41,7 @@ const HeroSection = () => {
             {[
               ['San Jose, CA', 'Mercado principal'],
               ['Colima, MX', 'Soporte creativo'],
-              ['Bilingue', 'Espanol / ingles'],
+              ['Bilingue', 'Espanol'],
               ['Cotizacion', 'Respuesta rapida'],
             ].map(([value, label]) => (
               <div key={value} className="bg-slate-950 border border-slate-800 rounded-lg p-5">

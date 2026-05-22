@@ -3,9 +3,12 @@ import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 const secret = process.env.JWT_SECRET || 'stratedge-dev-secret-change-before-production';
 const sessions = new Map();
 
+// Firma el contenido del token con HMAC para detectar alteraciones.
 const sign = (payload) =>
   createHmac('sha256', secret).update(payload).digest('base64url');
 
+// Crea un token temporal para el administrador autenticado.
+// El nonce hace unico cada token y exp define su vencimiento.
 export const createToken = (admin) => {
   const payload = JSON.stringify({
     sub: admin.id,
@@ -19,6 +22,7 @@ export const createToken = (admin) => {
   return token;
 };
 
+// Valida que el token exista, que su firma sea correcta y que no haya expirado.
 export const verifyToken = (token) => {
   if (!token || !sessions.has(token) || !token.includes('.')) return null;
   const [encodedPayload, signature] = token.split('.');
@@ -35,6 +39,7 @@ export const verifyToken = (token) => {
   return payload;
 };
 
+// Cierra la sesion eliminando el token del registro en memoria.
 export const revokeToken = (token) => {
   sessions.delete(token);
 };

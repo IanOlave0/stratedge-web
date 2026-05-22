@@ -1,6 +1,6 @@
-# Stratedge Marketing - Proyecto Full Stack
+# Agencia Digital MX - Proyecto Web Completo
 
-Sistema web escolar para una agencia de marketing. Sigue el planteamiento del reporte: React + Node.js + API REST + MySQL.
+Sistema web escolar para una agencia digital. Sigue el planteamiento del reporte: React + Node.js + API REST + MySQL.
 
 ## Tecnologias
 
@@ -83,6 +83,30 @@ usuario: admin
 contrasena: Admin123!
 ```
 
+## Seguridad de contrasenas
+
+La contrasena del administrador no se guarda como texto normal. El backend genera un `salt` aleatorio y crea un hash con `PBKDF2`, `SHA-512`, 100000 iteraciones y 64 bytes de salida.
+
+El resultado se guarda en la tabla `admins`, columna `password_hash`, con este formato:
+
+```text
+salt:hash
+```
+
+Cuando el administrador inicia sesion, el backend no desencripta nada. Toma la contrasena escrita, vuelve a calcular el hash con el mismo `salt` y compara el resultado con `timingSafeEqual`.
+
+El codigo esta en:
+
+```text
+backend/db.js
+```
+
+El login que usa esa verificacion esta en:
+
+```text
+backend/server.js
+```
+
 ## Consultar la base en MySQL/phpMyAdmin
 
 Ejemplos:
@@ -101,4 +125,3 @@ SELECT * FROM services;
 npm.cmd run lint
 npm.cmd run build
 ```
-

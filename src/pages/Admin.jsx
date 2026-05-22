@@ -1,10 +1,18 @@
 import { useEffect, useState } from 'react';
 import { api } from '../utils/api';
 
-const statuses = ['Nuevo lead', 'Contactado', 'En cotizacion', 'Cliente activo', 'Cerrado'];
+const statuses = ['Nueva solicitud', 'Contactado', 'En cotizacion', 'Cliente activo', 'Cerrado'];
 const emptyProject = { title: '', client: '', category: '', description: '', image: '' };
+const projectLabels = {
+  title: 'Titulo',
+  client: 'Cliente',
+  category: 'Categoria',
+  description: 'Descripcion',
+  image: 'URL de imagen',
+};
 
 const Admin = () => {
+  // Estado del panel privado: sesion, credenciales, solicitudes y portafolio.
   const [logged, setLogged] = useState(api.hasToken());
   const [login, setLogin] = useState({ username: 'admin', password: '' });
   const [leads, setLeads] = useState([]);
@@ -12,12 +20,14 @@ const Admin = () => {
   const [project, setProject] = useState(emptyProject);
   const [error, setError] = useState('');
 
+  // Carga en paralelo la informacion privada que necesita el administrador.
   const loadAdminData = async () => {
     const [leadRows, projectRows] = await Promise.all([api.getLeads(), api.getPortfolio()]);
     setLeads(leadRows);
     setProjects(projectRows);
   };
 
+  // Si existe sesion guardada, intenta cargar el panel automaticamente.
   useEffect(() => {
     if (logged) {
       Promise.resolve()
@@ -26,6 +36,7 @@ const Admin = () => {
     }
   }, [logged]);
 
+  // Envia credenciales al backend. Si son correctas, se guarda el token.
   const submitLogin = async (event) => {
     event.preventDefault();
     setError('');
@@ -37,11 +48,13 @@ const Admin = () => {
     }
   };
 
+  // Actualiza el avance comercial de una solicitud guardada.
   const changeStatus = async (id, status) => {
     await api.updateLeadStatus(id, status);
     await loadAdminData();
   };
 
+  // Agrega un nuevo proyecto al portafolio desde el panel privado.
   const saveProject = async (event) => {
     event.preventDefault();
     await api.createProject(project);
@@ -59,7 +72,7 @@ const Admin = () => {
           <input value={login.username} onChange={(e) => setLogin({ ...login, username: e.target.value })} className="w-full mb-4 rounded-lg bg-slate-950 border border-slate-700 text-white px-4 py-3" />
           <input type="password" placeholder="Contrasena" value={login.password} onChange={(e) => setLogin({ ...login, password: e.target.value })} className="w-full rounded-lg bg-slate-950 border border-slate-700 text-white px-4 py-3" />
           <button className="mt-6 w-full bg-emerald-600 text-white font-bold rounded-full py-3">Entrar</button>
-          <p className="text-slate-500 text-sm mt-4">Usuario demo: admin | Contrasena: Admin123!</p>
+          <p className="text-slate-500 text-sm mt-4">Usuario de prueba: admin | Contrasena: Admin123!</p>
         </form>
       </section>
     );
@@ -78,7 +91,7 @@ const Admin = () => {
 
         <section className="bg-slate-900 border border-slate-800 rounded-lg overflow-auto">
           <div className="p-5 border-b border-slate-800">
-            <h2 className="text-2xl font-bold text-white">Leads guardados</h2>
+            <h2 className="text-2xl font-bold text-white">Solicitudes guardadas</h2>
           </div>
           <table className="w-full text-left min-w-[900px]">
             <thead className="bg-slate-950 text-slate-300">
@@ -102,7 +115,7 @@ const Admin = () => {
           <form onSubmit={saveProject} className="bg-slate-900 border border-slate-800 rounded-lg p-6 space-y-4">
             <h2 className="text-2xl font-bold text-white">Agregar proyecto al portafolio</h2>
             {Object.keys(emptyProject).map((key) => (
-              <input key={key} required value={project[key]} placeholder={key} onChange={(e) => setProject({ ...project, [key]: e.target.value })} className="w-full rounded-lg bg-slate-950 border border-slate-700 text-white px-4 py-3" />
+              <input key={key} required value={project[key]} placeholder={projectLabels[key]} onChange={(e) => setProject({ ...project, [key]: e.target.value })} className="w-full rounded-lg bg-slate-950 border border-slate-700 text-white px-4 py-3" />
             ))}
             <button className="bg-emerald-600 text-white font-bold rounded-full px-6 py-3">Guardar proyecto</button>
           </form>
