@@ -1,7 +1,7 @@
 import React from 'react';
 import HeroSection from '../components/HeroSection';
 import PortafolioGrid from '../components/PortafolioGrid';
-import ServiciosSection from '../components/ServiciosSection';
+import ServicesSection from '../components/ServicesSection';
 
 /**
  * Página Home (Inicio)
@@ -17,7 +17,7 @@ export default function Home() {
         <PortafolioGrid />
       </div>
       <div id="servicios">
-        <ServiciosSection />
+        <ServicesSection />
       </div>
     </>
   );

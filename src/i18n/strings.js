@@ -1,152 +1,121 @@
-/**
- * Archivo central de strings de UI para internacionalización (i18n).
- * * Todas las cadenas visibles al usuario deben referenciarse desde aquí.
- * * En el futuro, este archivo se reemplazará por un sistema completo de i18n
- * * (react-i18next, react-intl, etc.) para soportar el mercado de California (inglés).
- *
- * Cada sección usa un namespace que corresponde al componente o página.
- * Estructura pensada para migración sencilla a archivos JSON por idioma.
- */
-
+// Textos visibles centralizados. Mantenerlos aqui facilita traducir o ajustar
+// la interfaz sin buscar cadenas sueltas por todos los componentes.
 export const STRINGS = {
-  /* ──────────────── Navbar ──────────────── */
   nav: {
-    brandName: "Stratedge",
-    brandSuffix: "Marketing",
+    brandName: 'Agencia',
+    brandSuffix: 'Digital MX',
     links: {
-      home: "Inicio",
-      portfolio: "Portafolio",
-      services: "Servicios",
+      home: 'Inicio',
+      portfolio: 'Portafolio',
+      services: 'Servicios',
     },
-    cta: "Cotizar Proyecto",
+    cta: 'Cotizar',
   },
 
-  /* ──────────────── Hero ──────────────── */
   hero: {
-    tagline: "Agencia de Marketing Digital & Estrategia Avanzada",
-    headlineLine1: "Estrategias que Impulsan.",
-    headlineLine2: "Resultados que Perduran.",
+    tagline: 'Mercadotecnia digital para negocios en California',
+    headlineLine1: 'Estrategia y creatividad.',
+    headlineLine2: 'Campanas para atraer clientes.',
     description:
-      "En Stratedge Marketing LLC, fusionamos análisis de precisión con creatividad de alto impacto para transformar su visión en crecimiento sostenible.",
-    ctaPrimary: "Cotizar Proyecto",
-    ctaSecondary: "Nuestros Servicios",
+      'Agencia Digital MX ayuda a pequenas empresas, emprendedores y marcas locales a mejorar su presencia digital con sitios web, publicidad, redes sociales, identidad de marca y contenido visual.',
+    ctaPrimary: 'Cotizar proyecto',
+    ctaSecondary: 'Ver servicios',
   },
 
-  /* ──────────────── Footer ──────────────── */
   footer: {
-    brandName: "Stratedge",
-    brandSuffix: "Marketing LLC",
-    copyright: (year) => `© ${year} Todos los derechos reservados.`,
+    brandName: 'Agencia',
+    brandSuffix: 'Digital MX',
+    copyright: (year) => `(c) ${year} Todos los derechos reservados.`,
     links: {
-      privacy: "Aviso de Privacidad",
-      terms: "Términos y Condiciones",
-      instagram: "Instagram",
+      privacy: 'Aviso de privacidad',
+      terms: 'Terminos y condiciones',
+      instagram: 'Instagram',
     },
   },
 
-  /* ──────────────── Portafolio ──────────────── */
   portfolio: {
-    heading: "Nuestros",
-    headingAccent: "Casos de Éxito",
+    heading: 'Nuestro',
+    headingAccent: 'Portafolio',
     description:
-      "Explora cómo hemos ayudado a empresas líderes a transformar su presencia digital y dominar sus respectivos mercados.",
-    clientLabel: "Cliente:",
+      'Los proyectos se cargan desde la base de datos e incluyen categoria, imagen, cliente y descripcion.',
+    clientLabel: 'Cliente:',
   },
 
-  /* ──────────────── Página Cotizador ──────────────── */
   cotizador: {
-    heading: "Cotiza tu",
-    headingAccent: "Proyecto",
+    heading: 'Cotiza tu',
+    headingAccent: 'Proyecto',
     description:
-      "Cuéntanos sobre tu visión. Completa estos sencillos pasos y obtén un estimado al instante.",
+      'Completa tus datos para guardar una solicitud validada en la base de datos.',
   },
 
-  /* ──────────────── Wizard ──────────────── */
   wizard: {
-    /* Etiquetas de progreso y navegación */
     stepLabel: (current, total) => `Paso ${current} de ${total}`,
-    back: "← Anterior",
-    next: "Siguiente →",
-    submit: "Enviar Cotización",
-    submitting: "Enviando...",
-
-    /* Nombres de pasos para los badges */
+    back: '< Anterior',
+    next: 'Siguiente >',
+    submit: 'Enviar cotizacion',
+    submitting: 'Enviando...',
     steps: {
-      1: "Servicios",
-      2: "Presupuesto",
-      3: "Contacto",
+      1: 'Servicios',
+      2: 'Presupuesto',
+      3: 'Contacto',
     },
-
-    /* Paso 1: Servicios (multi-selección) */
     step1: {
-      heading: "¿Qué necesitas?",
-      serviceLabel: "Selecciona los servicios que te interesan",
-      serviceHint: "Puedes elegir más de uno",
-      scopeLabel: "Cuéntanos brevemente sobre tu proyecto",
+      heading: 'Que necesitas?',
+      serviceLabel: 'Selecciona los servicios que te interesan',
+      serviceHint: 'Puedes elegir mas de uno',
+      scopeLabel: 'Cuentanos brevemente sobre tu proyecto',
       scopePlaceholder:
-        "Ej: Quiero rediseñar mi sitio web y lanzar campañas en Meta Ads para aumentar ventas...",
+        'Ej: Quiero redisenar mi sitio web y lanzar campanas para aumentar ventas.',
     },
-
-    /* Paso 2: Presupuesto y plazos */
     step2: {
-      heading: "Presupuesto y Plazos",
-      budgetLabel: "¿Cuál es tu presupuesto estimado?",
-      budgetPlaceholder: "Selecciona un rango",
-      timelineLabel: "¿Para cuándo lo necesitas?",
-      timelinePlaceholder: "Selecciona la urgencia",
-      notesLabel: "Notas adicionales (opcional)",
-      notesPlaceholder: "Cualquier detalle adicional que quieras compartir...",
+      heading: 'Presupuesto y plazos',
+      budgetLabel: 'Cual es tu presupuesto estimado?',
+      budgetPlaceholder: 'Selecciona un rango',
+      timelineLabel: 'Para cuando lo necesitas?',
+      timelinePlaceholder: 'Selecciona la urgencia',
+      notesLabel: 'Notas adicionales (opcional)',
+      notesPlaceholder: 'Cualquier detalle adicional que quieras compartir.',
     },
-
-    /* Paso 3: Contacto */
     step3: {
-      heading: "Tus Datos",
+      heading: 'Tus datos',
       description:
-        "Déjanos tus datos y te enviaremos la cotización en menos de 24 horas.",
-      fullName: "Nombre completo",
-      fullNamePlaceholder: "Ej: Ana García",
-      email: "Correo electrónico",
-      emailPlaceholder: "ana@empresa.com",
-      company: "Empresa",
-      companyPlaceholder: "Nombre de tu empresa",
-      phone: "Teléfono (opcional)",
-      phonePlaceholder: "+52 55 1234 5678",
+        'Dejanos tus datos y te contactaremos para dar seguimiento a la cotizacion.',
+      fullName: 'Nombre completo',
+      fullNamePlaceholder: 'Ej: Ana Garcia',
+      email: 'Correo electronico',
+      emailPlaceholder: 'ana@empresa.com',
+      company: 'Empresa',
+      companyPlaceholder: 'Nombre de tu empresa',
+      phone: 'Telefono (opcional)',
+      phonePlaceholder: '5551234567',
     },
-
-    /* Mensajes de error de validación (Zod) */
     errors: {
-      servicesRequired: "Selecciona al menos un servicio",
-      scopeMin: "Describe tu proyecto con al menos 10 caracteres",
-      budgetRequired: "Selecciona un rango de presupuesto",
-      timelineRequired: "Selecciona la urgencia del proyecto",
-      fullNameMin: "El nombre debe tener al menos 2 caracteres",
-      emailInvalid: "Ingresa un correo electrónico válido",
-      companyMin: "Ingresa el nombre de tu empresa",
+      servicesRequired: 'Selecciona al menos un servicio',
+      scopeMin: 'Describe tu proyecto con al menos 10 caracteres',
+      budgetRequired: 'Selecciona un rango de presupuesto',
+      timelineRequired: 'Selecciona la urgencia del proyecto',
+      fullNameMin: 'El nombre debe tener al menos 2 caracteres',
+      emailInvalid: 'Ingresa un correo electronico valido',
+      companyMin: 'Ingresa el nombre de tu empresa',
     },
-
-    /* Mensajes de éxito */
-    success: "¡Cotización enviada! Te contactaremos pronto.",
-
-    /* Opciones de datos (también visibles en UI) */
+    success: 'Cotizacion enviada. Te contactaremos pronto.',
     serviceOptions: [
-      { value: "branding", label: "Branding e Identidad Visual" },
-      { value: "web", label: "Desarrollo Web / App" },
-      { value: "ads", label: "Publicidad Digital (Ads)" },
-      { value: "ecommerce", label: "Optimización E-Commerce" },
-      { value: "social", label: "Gestión de Redes Sociales" },
+      { value: 'branding', label: 'Identidad de Marca' },
+      { value: 'web', label: 'Desarrollo Web' },
+      { value: 'ads', label: 'Anuncios Digitales' },
+      { value: 'ecommerce', label: 'Comercio Electronico' },
+      { value: 'social', label: 'Gestion de Redes Sociales' },
     ],
-
     budgetOptions: [
-      { value: "under_5k", label: "Menos de $5,000" },
-      { value: "5k_15k", label: "$5,000 — $15,000" },
-      { value: "15k_50k", label: "$15,000 — $50,000" },
-      { value: "over_50k", label: "Más de $50,000" },
+      { value: 'under_5k', label: 'Menos de $5,000' },
+      { value: '5k_15k', label: '$5,000 - $15,000' },
+      { value: '15k_50k', label: '$15,000 - $50,000' },
+      { value: 'over_50k', label: 'Mas de $50,000' },
     ],
-
     timelineOptions: [
-      { value: "urgent", label: "Urgente (1-2 semanas)" },
-      { value: "standard", label: "Estándar (3-6 semanas)" },
-      { value: "relaxed", label: "Sin prisa (2+ meses)" },
+      { value: 'urgent', label: 'Urgente (1-2 semanas)' },
+      { value: 'standard', label: 'Estandar (3-6 semanas)' },
+      { value: 'relaxed', label: 'Sin prisa (2+ meses)' },
     ],
   },
 };

@@ -1,47 +1,23 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { STRINGS } from '../i18n/strings';
+import { api } from '../utils/api';
 
 /**
  * Componente PortafolioGrid
- * * Cuadrícula responsiva de proyectos con shadcn Card.
- * * Los datos de proyectos son mock data — en el futuro vendrán del backend.
+ * Muestra proyectos reales consultados desde la API y almacenados en MySQL.
  */
 export default function PortafolioGrid() {
   const { portfolio } = STRINGS;
+  const [projects, setProjects] = useState([]);
 
-  // Datos de prueba (Mock data)
-  const projects = [
-    {
-      id: 1,
-      title: "Rebranding y Expansión Digital",
-      client: "TechNova Solutions",
-      category: "Identidad Visual",
-      description: "Rediseño completo de la marca y estrategia de posicionamiento que resultó en un aumento del 40% en la retención de usuarios web.",
-      image: "https://placehold.co/600x400/0f172a/34d399?text=Proyecto+1",
-    },
-    {
-      id: 2,
-      title: "Campaña de Lanzamiento B2B",
-      client: "Logistics Pro",
-      category: "Marketing B2B",
-      description: "Estrategia integral de captación de leads que generó más de 500 prospectos calificados en el primer trimestre.",
-      image: "https://placehold.co/600x400/0f172a/34d399?text=Proyecto+2",
-    },
-    {
-      id: 3,
-      title: "Optimización de E-Commerce",
-      client: "ModaUrbana",
-      category: "CRO & Analítica",
-      description: "Auditoría UX/UI y rediseño de embudo de ventas, logrando incrementar la tasa de conversión en un 25%.",
-      image: "https://placehold.co/600x400/0f172a/34d399?text=Proyecto+3",
-    },
-  ];
+  useEffect(() => {
+    api.getPortfolio().then(setProjects).catch(() => setProjects([]));
+  }, []);
 
   return (
     <section className="bg-slate-900 py-20">
       <div className="container mx-auto px-6">
-        {/* Encabezado de la Sección */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-4">
             {portfolio.heading} <span className="text-emerald-500">{portfolio.headingAccent}</span>
@@ -51,7 +27,6 @@ export default function PortafolioGrid() {
           </p>
         </div>
 
-        {/* Cuadrícula de proyectos con shadcn Card */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project) => (
             <Card
